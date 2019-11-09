@@ -66,6 +66,23 @@ class TimeValueMoney():
     def bond_value(self, I, M, i, n):
         return I*self.T4(i,n) + M*self.T3(i,n)
 
+    ''' Armotized payment '''
+    def A(self, Pn, i, n):
+        return Pn/self.T4(i,n)
+
+    def Pn(self, A, i, n):
+        return A*self.T4(i,n)        
+    
+    def sched(self, Pn, i, n):
+        sched = []
+        A = self.A(Pn, i, n)
+        for j in range(0,n):
+            sched.append(Pn)
+            Pn = Pn*(1.0+i)
+            Pn -= A
+        sched.append(Pn)
+        return sched
+            
 def formatFV(P, i, n, m):
     return 'P:{:,} i:{:.2f} n:{} m:{} FV:{:,.2f}'
 
@@ -128,6 +145,24 @@ def main(argv):
     
     I = 50; M=1000; i=.06; n=20
     print('I:{:,} M:{:,} i:{:.2f} n:{} bond-value:{:,.2f}'.format(I, M, i, n, tvm.bond_value(I, M, i, n)))
+    
+    P5=200000.0; i=.14; n=5
+    print('P5:${:,.2f} i:{:.0f}% n:{} A=${:,.2f}'.format(P5, 100*i, n, tvm.A(P5, i, n)))
+
+    P40=5000.0; i=.12/12; n=40
+    print('P40:${:,.2f} i:{:.0f}% n:{} A=${:,.2f}'.format(P40, 100*i, n, tvm.A(P40, i, n)))
+
+    P3=2000.0; i=.12; n=3
+    print('P3:${:,.2f} i:{:.0f}% n:{} A=${:,.2f}'.format(P3, 100*i, n, tvm.A(P3, i, n)))
+
+    P40=5000.0; i=.12/12.0; n=40
+    print('P40:${:,.2f} i:{:.0f}% n:{} A=${:,.2f}'.format(P40, 100*i, n, tvm.A(P40, i, n)))
+    payments = tvm.sched(P40, i, n)
+    count = 1
+    for payment in payments:
+        print('{:2}. {:,.2f}'.format(count, payment))
+        count += 1
+     
     
 if __name__ == '__main__':
     main(sys.argv[1:])
