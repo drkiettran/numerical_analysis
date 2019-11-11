@@ -1,6 +1,6 @@
 import sys
 
-class TimeValueMoney():
+class Time_Value_Money():
     
     '''
     T1(i,n)
@@ -81,7 +81,7 @@ class TimeValueMoney():
             Pn = Pn*(1.0+i)
             Pn -= A
         sched.append(Pn)
-        return sched
+        return A, sched
             
 def formatFV(P, i, n, m):
     return 'P:{:,} i:{:.2f} n:{} m:{} FV:{:,.2f}'
@@ -90,7 +90,7 @@ def formatPV(P, i, n, m):
     return 'P:{:,} i:{:.2f} n:{} m:{} PV:{:,.2f}'
 
 def main(argv):
-    tvm = TimeValueMoney()
+    tvm = Time_Value_Money()
     print('T1 {}: {:.3f}'.format(1, tvm.T1(0.04, 40)))
     print('T2 {}: {:.3f}'.format(1, tvm.T2(0.04, 40)))
     print('T3 {}: {:.3f}'.format(1, tvm.T3(0.04, 40)))
@@ -157,12 +157,17 @@ def main(argv):
 
     P40=5000.0; i=.12/12.0; n=40
     print('P40:${:,.2f} i:{:.0f}% n:{} A=${:,.2f}'.format(P40, 100*i, n, tvm.A(P40, i, n)))
-    payments = tvm.sched(P40, i, n)
+  
+
+    P120=600000.0; i=.03/12.0; n=120
+    print('P40:${:,.2f} i:{:.0f}% n:{} A=${:,.2f}'.format(P120, 100*i*12, n, tvm.A(P120, i, n)))
+    
+    A, principles = tvm.sched(P120, i, n)
     count = 1
-    for payment in payments:
-        print('{:2}. {:,.2f}'.format(count, payment))
+    for principle in principles:
+        print('{:2}. payment: {:,.2f} principle: {:,.2f}'.format(count, A, principle))
         count += 1
-     
+    print('P40:${:,.2f} i:{:.0f}% n:{} A=${:,.2f}'.format(P120, 100*i*12, n, A))
     
 if __name__ == '__main__':
     main(sys.argv[1:])
