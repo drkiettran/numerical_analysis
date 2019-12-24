@@ -16,10 +16,10 @@ class Stock_And_Bond():
     n = number of year to maturity
     '''
     def BV(self, I, M, r, n):
-        return I*self.mytvm.T4(r,n) + M*self.mytvm.T3(r,n)
+        return I * self.mytvm.t4(r, n) + M * self.mytvm.t3(r, n)
         
     def BV_m(self, I, M, r, n, m):
-        return I*self.mytvm.T4(r/m,n*m) + M*self.mytvm.T3(r/m,n*m)
+        return I * self.mytvm.t4(r / m, n * m) + M * self.mytvm.t3(r / m, n * m)
         
     def Yield(self, I, M, V, n):
         return (I+((M-V)/n))/((M+V)/2.0)
@@ -31,7 +31,7 @@ class Stock_And_Bond():
         return D/V
     
     def CSV(self, divident, price, r):
-        return divident*self.mytvm.T3(r,1) + price*self.mytvm.T3(r,1)
+        return divident * self.mytvm.t3(r, 1) + price * self.mytvm.t3(r, 1)
     
     def CSV_model(self, dividents, r):
         sum = 0.0
